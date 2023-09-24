@@ -5,8 +5,7 @@ import "testing"
 func TestQueue(t *testing.T) {
 	queue := CreateQueue()
 	for i := 0; i < 3; i++ {
-		node := CreateNode(i)
-		queue.Enqueue(node)
+		queue.Enqueue(i)
 	}
 
 	for i := 0; i < 3; i++ {

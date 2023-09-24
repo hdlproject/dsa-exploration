@@ -25,14 +25,14 @@ type Node struct {
 	next *Node
 }
 
-func CreateNode(data interface{}) *Node {
+func createNode(data interface{}) *Node {
 	return &Node{
 		data: data,
 	}
 }
 
 func (n *Node) String() string {
-	return fmt.Sprintf("%d", n)
+	return fmt.Sprintf("%v", n.data)
 }
 
 type Queue struct {
@@ -45,7 +45,7 @@ func CreateQueue() *Queue {
 }
 
 func (q *Queue) Enqueue(data interface{}) {
-	node := CreateNode(data)
+	node := createNode(data)
 
 	if q.lastNode == nil {
 		q.lastNode = node
