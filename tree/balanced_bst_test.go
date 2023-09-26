@@ -3,31 +3,24 @@ package tree
 import "testing"
 
 /* imbalanced tree
-			1
-	  2			  3
- 	4	5
-		  6
+			5
+	  2			  8
+ 	1	3
+		  4
 */
 /* balanced tree
-			1
-	  2			  3
- 	4	5			7
-		  6
+			5
+	  2			  8
+ 	1	3		7	9
+		  4	  6
 */
 func TestBalancedBST(t *testing.T) {
-	parentNode := CreateBST(1)
-	leftNode := CreateBST(2)
-	rightNode := CreateBST(3)
-	parentNode.Insert(left, leftNode)
-	parentNode.Insert(right, rightNode)
-
-	leftLeftNode := CreateBST(4)
-	leftRightNode := CreateBST(5)
-	leftNode.Insert(left, leftLeftNode)
-	leftNode.Insert(right, leftRightNode)
-
-	leftRightRightNode := CreateBST(6)
-	leftRightNode.Insert(right, leftRightRightNode)
+	parentNode := CreateBST(5)
+	parentNode.Insert(CreateBST(2))
+	parentNode.Insert(CreateBST(8))
+	parentNode.Insert(CreateBST(1))
+	parentNode.Insert(CreateBST(3))
+	parentNode.Insert(CreateBST(4))
 
 	balancedBST := CreateBalancedBST(parentNode)
 	isBalanced := balancedBST.IsBalanced()
@@ -35,8 +28,9 @@ func TestBalancedBST(t *testing.T) {
 		t.Fatalf("expect is_balanced %v but got %v", false, isBalanced)
 	}
 
-	rightRightNode := CreateBST(7)
-	rightNode.Insert(right, rightRightNode)
+	parentNode.Insert(CreateBST(7))
+	parentNode.Insert(CreateBST(9))
+	parentNode.Insert(CreateBST(6))
 
 	isBalanced = balancedBST.IsBalanced()
 	if !isBalanced {

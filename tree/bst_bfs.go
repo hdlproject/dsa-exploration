@@ -2,6 +2,7 @@ package tree
 
 import (
 	"fmt"
+	"strings"
 
 	"dsa-exploration/queue"
 )
@@ -32,35 +33,36 @@ func (b *BSTBFS) Search(data int) *BST {
 			return b.curr
 		}
 
-		if b.curr.Left != nil {
-			b.queue.Enqueue(b.curr.Left)
+		if b.curr.left != nil {
+			b.queue.Enqueue(b.curr.left)
 		}
 
-		if b.curr.Right != nil {
-			b.queue.Enqueue(b.curr.Right)
+		if b.curr.right != nil {
+			b.queue.Enqueue(b.curr.right)
 		}
 	}
 
 	return nil
 }
 
-func (b *BSTBFS) Traverse() {
+func (b *BSTBFS) Traverse() string {
 	b.queue.Enqueue(b.root)
 
+	var result string
 	for !b.queue.IsEmpty() {
 		b.currQ = b.queue.Dequeue()
 
 		b.curr = b.currQ.(*BST)
-		fmt.Printf("%s ", b.curr)
+		result = fmt.Sprintf("%s %d", result, b.curr.data)
 
-		if b.curr.Left != nil {
-			b.queue.Enqueue(b.curr.Left)
+		if b.curr.left != nil {
+			b.queue.Enqueue(b.curr.left)
 		}
 
-		if b.curr.Right != nil {
-			b.queue.Enqueue(b.curr.Right)
+		if b.curr.right != nil {
+			b.queue.Enqueue(b.curr.right)
 		}
 	}
 
-	fmt.Println()
+	return strings.Trim(result, " ")
 }

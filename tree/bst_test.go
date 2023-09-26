@@ -1,58 +1,54 @@
 package tree
 
-import "testing"
+import (
+	"testing"
+)
 
 /*
-				1
-		  2			  3
-	 	4	5		6	7
-			  8	  9
+				5
+		  2			  8
+	 	1	3		7	9
+			  4	  6
 */
-func TestBSTDFS(t *testing.T) {
-	parentNode := CreateBST(1)
-	leftNode := CreateBST(2)
-	rightNode := CreateBST(3)
-	parentNode.Insert(left, leftNode)
-	parentNode.Insert(right, rightNode)
+func TestBST(t *testing.T) {
+	parentNode := CreateBST(5)
+	parentNode.Insert(CreateBST(2))
+	parentNode.Insert(CreateBST(8))
+	parentNode.Insert(CreateBST(1))
+	parentNode.Insert(CreateBST(3))
+	parentNode.Insert(CreateBST(7))
+	parentNode.Insert(CreateBST(9))
+	parentNode.Insert(CreateBST(4))
+	parentNode.Insert(CreateBST(6))
 
-	leftLeftNode := CreateBST(4)
-	leftRightNode := CreateBST(5)
-	leftNode.Insert(left, leftLeftNode)
-	leftNode.Insert(right, leftRightNode)
-
-	leftRightRightNode := CreateBST(8)
-	leftRightNode.Insert(right, leftRightRightNode)
-
-	rightLeftNode := CreateBST(6)
-	rightRightNode := CreateBST(7)
-	rightNode.Insert(left, rightLeftNode)
-	rightNode.Insert(right, rightRightNode)
-
-	rightLeftLeftNode := CreateBST(9)
-	rightLeftNode.Insert(left, rightLeftLeftNode)
-
-	// expected --->> 1 2 4 5 8 3 6 9 7
+	expectedRes := "5 2 1 3 4 8 7 6 9"
 	bstDFS := CreateBSTDFS(parentNode)
-	bstDFS.Traverse()
+	res := bstDFS.Traverse()
+	if expectedRes != res {
+		t.Fatalf("expect result %s but got %s", expectedRes, res)
+	}
 
 	expectedData := 5
-	res := bstDFS.Search(expectedData)
-	if res == nil {
+	searchRes := bstDFS.Search(expectedData)
+	if searchRes == nil {
 		t.Fatalf("expect not nil result")
 	}
-	if res.data != expectedData {
-		t.Fatalf("expect data %d but got %d", expectedData, res.data)
+	if searchRes.data != expectedData {
+		t.Fatalf("expect data %d but got %d", expectedData, searchRes.data)
 	}
 
-	//// expected --->> 1 2 3 4 5 6 7 8 9
+	expectedRes = "5 2 8 1 3 7 9 4 6"
 	bstBFS := CreateBSTBFS(parentNode)
-	bstBFS.Traverse()
+	res = bstBFS.Traverse()
+	if expectedRes != res {
+		t.Fatalf("expect result %s but got %s", expectedRes, res)
+	}
 
-	res = bstBFS.Search(expectedData)
-	if res == nil {
+	searchRes = bstBFS.Search(expectedData)
+	if searchRes == nil {
 		t.Fatalf("expect not nil result")
 	}
-	if res.data != expectedData {
-		t.Fatalf("expect data %d but got %d", expectedData, res.data)
+	if searchRes.data != expectedData {
+		t.Fatalf("expect data %d but got %d", expectedData, searchRes.data)
 	}
 }

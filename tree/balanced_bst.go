@@ -24,8 +24,8 @@ func (b *BalancedBST) isBalanced(curr *BST, height *int) bool {
 		return true
 	}
 
-	isLeftBalanced := b.isBalanced(curr.Left, &leftHeight)
-	isRightBalanced := b.isBalanced(curr.Right, &rightHeight)
+	isLeftBalanced := b.isBalanced(curr.left, &leftHeight)
+	isRightBalanced := b.isBalanced(curr.right, &rightHeight)
 
 	*height = int(math.Max(float64(leftHeight), float64(rightHeight))) + 1
 

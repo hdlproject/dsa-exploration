@@ -1,6 +1,9 @@
 package tree
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 type BSTDFS struct {
 	root *BST
@@ -25,15 +28,15 @@ func (b *BSTDFS) search(curr *BST, data int) *BST {
 		return curr
 	}
 
-	if curr.Left != nil {
-		res := b.search(curr.Left, data)
+	if curr.left != nil {
+		res := b.search(curr.left, data)
 		if res != nil {
 			return res
 		}
 	}
 
-	if curr.Right != nil {
-		res := b.search(curr.Right, data)
+	if curr.right != nil {
+		res := b.search(curr.right, data)
 		if res != nil {
 			return res
 		}
@@ -42,21 +45,25 @@ func (b *BSTDFS) search(curr *BST, data int) *BST {
 	return nil
 }
 
-func (b *BSTDFS) Traverse() {
-	b.traverse(b.root)
-	fmt.Println()
+func (b *BSTDFS) Traverse() string {
+	var result string
+	b.traverse(b.root, &result)
+
+	return strings.Trim(result, " ")
 }
 
-func (b *BSTDFS) traverse(curr *BST) {
-	fmt.Printf("%d ", curr.data)
+func (b *BSTDFS) traverse(curr *BST, result *string) {
+	res := fmt.Sprintf("%s %d", *result, curr.data)
+
+	*result = res
 
 	b.curr = curr
 
-	if curr.Left != nil {
-		b.traverse(curr.Left)
+	if curr.left != nil {
+		b.traverse(curr.left, result)
 	}
 
-	if curr.Right != nil {
-		b.traverse(curr.Right)
+	if curr.right != nil {
+		b.traverse(curr.right, result)
 	}
 }
