@@ -15,6 +15,28 @@ func CreateBST(data int) *BST {
 	}
 }
 
+func (b *BST) GetLeft() BSTTraversal {
+	if b.left == nil {
+		return nil
+	}
+	return b.left
+}
+
+func (b *BST) GetRight() BSTTraversal {
+	if b.right == nil {
+		return nil
+	}
+	return b.right
+}
+
+func (b *BST) GetData() int {
+	return b.data
+}
+
+func (b *BST) String() string {
+	return fmt.Sprintf("%d", b.data)
+}
+
 func (b *BST) Insert(node *BST) {
 	curr := b
 
@@ -39,8 +61,4 @@ func (b *BST) Insert(node *BST) {
 		curr.right = node
 	}
 	node.parent = curr
-}
-
-func (b *BST) String() string {
-	return fmt.Sprintf("%d", b.data)
 }

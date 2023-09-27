@@ -6,37 +6,37 @@ import (
 )
 
 type BSTDFS struct {
-	root *BST
-	curr *BST
+	root BSTTraversal
+	curr BSTTraversal
 }
 
-func CreateBSTDFS(bst *BST) *BSTDFS {
+func CreateBSTDFS(bst BSTTraversal) *BSTDFS {
 	return &BSTDFS{
 		root: bst,
 		curr: bst,
 	}
 }
 
-func (b *BSTDFS) Search(data int) *BST {
+func (b *BSTDFS) Search(data int) BSTTraversal {
 	return b.search(b.root, data)
 }
 
-func (b *BSTDFS) search(curr *BST, data int) *BST {
+func (b *BSTDFS) search(curr BSTTraversal, data int) BSTTraversal {
 	b.curr = curr
 
-	if curr.data == data {
+	if curr.GetData() == data {
 		return curr
 	}
 
-	if curr.left != nil {
-		res := b.search(curr.left, data)
+	if curr.GetLeft() != nil {
+		res := b.search(curr.GetLeft(), data)
 		if res != nil {
 			return res
 		}
 	}
 
-	if curr.right != nil {
-		res := b.search(curr.right, data)
+	if curr.GetRight() != nil {
+		res := b.search(curr.GetRight(), data)
 		if res != nil {
 			return res
 		}
@@ -52,18 +52,18 @@ func (b *BSTDFS) Traverse() string {
 	return strings.Trim(result, " ")
 }
 
-func (b *BSTDFS) traverse(curr *BST, result *string) {
-	res := fmt.Sprintf("%s %d", *result, curr.data)
+func (b *BSTDFS) traverse(curr BSTTraversal, result *string) {
+	res := fmt.Sprintf("%s %d", *result, curr.GetData())
 
 	*result = res
 
 	b.curr = curr
 
-	if curr.left != nil {
-		b.traverse(curr.left, result)
+	if curr.GetLeft() != nil {
+		b.traverse(curr.GetLeft(), result)
 	}
 
-	if curr.right != nil {
-		b.traverse(curr.right, result)
+	if curr.GetRight() != nil {
+		b.traverse(curr.GetRight(), result)
 	}
 }

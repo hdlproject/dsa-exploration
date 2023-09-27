@@ -33,8 +33,8 @@ func TestBST(t *testing.T) {
 	if searchRes == nil {
 		t.Fatalf("expect not nil result")
 	}
-	if searchRes.data != expectedData {
-		t.Fatalf("expect data %d but got %d", expectedData, searchRes.data)
+	if searchRes.GetData() != expectedData {
+		t.Fatalf("expect data %d but got %d", expectedData, searchRes.GetData())
 	}
 
 	expectedRes = "5 2 8 1 3 7 9 4 6"
@@ -48,7 +48,7 @@ func TestBST(t *testing.T) {
 	if searchRes == nil {
 		t.Fatalf("expect not nil result")
 	}
-	if searchRes.data != expectedData {
-		t.Fatalf("expect data %d but got %d", expectedData, searchRes.data)
+	if searchRes.GetData() != expectedData {
+		t.Fatalf("expect data %d but got %d", expectedData, searchRes.GetData())
 	}
 }

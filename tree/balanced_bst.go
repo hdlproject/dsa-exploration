@@ -1,25 +1,78 @@
 package tree
 
 import (
+	"fmt"
 	"math"
 )
 
 type BalancedBST struct {
-	root *BST
+	data          int
+	parent        *BalancedBST
+	left          *BalancedBST
+	right         *BalancedBST
+	balanceFactor int
 }
 
-func CreateBalancedBST(bst *BST) *BalancedBST {
+func CreateBalancedBST(data int) *BalancedBST {
 	return &BalancedBST{
-		root: bst,
+		data: data,
 	}
+}
+
+func (b *BalancedBST) GetLeft() BSTTraversal {
+	if b.left == nil {
+		return nil
+	}
+	return b.left
+}
+
+func (b *BalancedBST) GetRight() BSTTraversal {
+	if b.right == nil {
+		return nil
+	}
+	return b.right
+}
+
+func (b *BalancedBST) GetData() int {
+	return b.data
+}
+
+func (b *BalancedBST) String() string {
+	return fmt.Sprintf("%d", b.data)
+}
+
+func (b *BalancedBST) Insert(node *BalancedBST) {
+	curr := b
+
+	for {
+		var next *BalancedBST
+		if node.data <= curr.data {
+			next = curr.left
+		} else {
+			next = curr.right
+		}
+
+		if next == nil {
+			break
+		}
+
+		curr = next
+	}
+
+	if node.data <= curr.data {
+		curr.left = node
+	} else {
+		curr.right = node
+	}
+	node.parent = curr
 }
 
 func (b *BalancedBST) IsBalanced() bool {
 	var height int
-	return b.isBalanced(b.root, &height)
+	return b.isBalanced(b, &height)
 }
 
-func (b *BalancedBST) isBalanced(curr *BST, height *int) bool {
+func (b *BalancedBST) isBalanced(curr *BalancedBST, height *int) bool {
 	if curr == nil {
 		return true
 	}
@@ -37,12 +90,12 @@ func (b *BalancedBST) isBalanced(curr *BST, height *int) bool {
 	return false
 }
 
-func (b *BalancedBST) GetImbalancedNode() *BST {
+func (b *BalancedBST) GetImbalancedNode() *BalancedBST {
 	var height int
-	return b.getImbalancedNode(b.root, &height)
+	return b.getImbalancedNode(b, &height)
 }
 
-func (b *BalancedBST) getImbalancedNode(curr *BST, height *int) *BST {
+func (b *BalancedBST) getImbalancedNode(curr *BalancedBST, height *int) *BalancedBST {
 	if curr == nil {
 		return nil
 	}
@@ -66,44 +119,44 @@ func (b *BalancedBST) getImbalancedNode(curr *BST, height *int) *BST {
 	return curr
 }
 
-func (b *BalancedBST) RotateLeft(curr *BST) {
-	if curr.parent != nil {
-		if curr.parent.right == curr {
-			curr.parent.right = curr.right
-		} else if curr.parent.left == curr {
-			curr.parent.left = curr.right
+func (b *BalancedBST) RotateLeft() {
+	if b.parent != nil {
+		if b.parent.right == b {
+			b.parent.right = b.right
+		} else if b.parent.left == b {
+			b.parent.left = b.right
 		}
 
-		curr.right.parent = curr.parent
+		b.right.parent = b.parent
 	}
 
-	curr.parent = curr.right
+	b.parent = b.right
 
-	if curr.parent.left != nil {
-		curr.parent.left.parent = curr
+	if b.parent.left != nil {
+		b.parent.left.parent = b
 	}
-	curr.right = curr.parent.left
+	b.right = b.parent.left
 
-	curr.parent.left = curr
+	b.parent.left = b
 }
 
-func (b *BalancedBST) RotateRight(curr *BST) {
-	if curr.parent != nil {
-		if curr.parent.left == curr {
-			curr.parent.left = curr.left
-		} else if curr.parent.right == curr {
-			curr.parent.right = curr.left
+func (b *BalancedBST) RotateRight() {
+	if b.parent != nil {
+		if b.parent.left == b {
+			b.parent.left = b.left
+		} else if b.parent.right == b {
+			b.parent.right = b.left
 		}
 
-		curr.left.parent = curr.parent
+		b.left.parent = b.parent
 	}
 
-	curr.parent = curr.left
+	b.parent = b.left
 
-	if curr.parent.right != nil {
-		curr.parent.right.parent = curr
+	if b.parent.right != nil {
+		b.parent.right.parent = b
 	}
-	curr.left = curr.parent.right
+	b.left = b.parent.right
 
-	curr.parent.right = curr
+	b.parent.right = b
 }
