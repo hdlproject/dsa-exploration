@@ -117,3 +117,55 @@ func TestBalancedBST_RotateLeft(t *testing.T) {
 		t.Fatalf("expect res %s but got %s", expectedRes, res)
 	}
 }
+
+/*
+	 imbalanced tree
+				5
+		  2			  8
+	 	1	3
+			  4
+*/
+/*
+	 after first rotating
+				5
+		  3			  8
+	 	2	4
+	  1
+*/
+/*
+	 after second rotating
+				3
+		  2			  5
+	 	1			4	8
+*/
+func TestBalancedBST_RotateLeftRight(t *testing.T) {
+	parentNode := CreateBST(5)
+	firstRotationNode := CreateBST(2)
+	parentNode.Insert(firstRotationNode)
+	parentNodeAfterRotation := CreateBST(3)
+	parentNode.Insert(parentNodeAfterRotation)
+	parentNode.Insert(CreateBST(4))
+	parentNode.Insert(CreateBST(1))
+	parentNode.Insert(CreateBST(8))
+
+	balancedBST := CreateBalancedBST(parentNode)
+	balancedBST.RotateLeft(firstRotationNode)
+
+	bstDFS := CreateBSTDFS(parentNode)
+	res := bstDFS.Traverse()
+
+	expectedRes := "5 3 2 1 4 8"
+	if res != expectedRes {
+		t.Fatalf("expect res %s but got %s", expectedRes, res)
+	}
+
+	balancedBST.RotateRight(parentNode)
+
+	bstDFS = CreateBSTDFS(parentNodeAfterRotation)
+	res = bstDFS.Traverse()
+
+	expectedRes = "3 2 1 5 4 8"
+	if res != expectedRes {
+		t.Fatalf("expect res %s but got %s", expectedRes, res)
+	}
+}
