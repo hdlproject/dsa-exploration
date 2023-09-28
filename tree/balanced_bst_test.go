@@ -141,3 +141,55 @@ func TestBalancedBST_RotateRightLeft(t *testing.T) {
 		t.Fatalf("expect res %s but got %s", expectedRes, res)
 	}
 }
+
+/*
+	 initial
+				4
+		  2			  7
+	 	1	3		6	8
+				  5		  9
+*/
+/*
+	 after first deletion
+				4
+		  2			  8
+	 	1	3		6	9
+				  5
+*/
+/*
+	 after second deletion
+				4
+		  2			  8
+	 	1	3		6	9
+				  5
+*/
+func TestBalancedBST_Delete(t *testing.T) {
+	parentNode := CreateBalancedBST(4)
+	parentNode.Insert(CreateBalancedBST(2))
+	parentNode.Insert(CreateBalancedBST(7))
+	parentNode.Insert(CreateBalancedBST(1))
+	parentNode.Insert(CreateBalancedBST(3))
+	parentNode.Insert(CreateBalancedBST(6))
+	parentNode.Insert(CreateBalancedBST(8))
+	parentNode.Insert(CreateBalancedBST(5))
+	parentNode.Insert(CreateBalancedBST(9))
+
+	parentNode.Delete(CreateBalancedBST(7))
+
+	bstDFS := CreateBSTDFS(parentNode)
+	res := bstDFS.Traverse()
+
+	expectedRes := "4 2 1 3 8 6 5 9"
+	if res != expectedRes {
+		t.Fatalf("expect res %s but got %s", expectedRes, res)
+	}
+
+	parentNode.Delete(CreateBalancedBST(5))
+
+	res = bstDFS.Traverse()
+
+	expectedRes = "4 2 1 3 8 6 9"
+	if res != expectedRes {
+		t.Fatalf("expect res %s but got %s", expectedRes, res)
+	}
+}

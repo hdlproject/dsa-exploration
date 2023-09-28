@@ -56,10 +56,12 @@ func (b *BalancedBST) Insert(node *BalancedBST) {
 
 	for {
 		var next *BalancedBST
-		if node.data <= curr.data {
+		if node.data < curr.data {
 			next = curr.left
-		} else {
+		} else if node.data > curr.data {
 			next = curr.right
+		} else {
+			return
 		}
 
 		if next == nil {
@@ -108,6 +110,80 @@ func (b *BalancedBST) Insert(node *BalancedBST) {
 	}
 }
 
+func (b *BalancedBST) Delete(node *BalancedBST) {
+	b.delete(node)
+}
+
+func (b *BalancedBST) delete(node *BalancedBST) {
+	curr := b
+
+	for {
+		var next *BalancedBST
+		if node.data < curr.data {
+			next = curr.left
+		} else if node.data > curr.data {
+			next = curr.right
+		} else {
+			break
+		}
+
+		if next == nil {
+			return
+		}
+
+		curr = next
+	}
+
+	var needUpdate *BalancedBST
+	if curr.left == nil {
+		replacement := curr.right
+
+		if replacement != nil {
+			replacement.parent = curr.parent
+			needUpdate = replacement.parent
+		}
+
+		if curr.data < curr.parent.data {
+			curr.parent.left = replacement
+		} else if curr.data > curr.parent.data {
+			curr.parent.right = replacement
+		}
+
+		curr = nil
+	} else if curr.right == nil {
+		replacement := curr.left
+
+		if replacement != nil {
+			replacement.parent = curr.parent
+			needUpdate = replacement.parent
+		}
+
+		if curr.data < curr.parent.data {
+			curr.parent.left = replacement
+		} else if curr.data > curr.parent.data {
+			curr.parent.right = replacement
+		}
+
+		curr = nil
+	} else {
+		replacement := curr.right.getMinimumNode()
+
+		b.delete(replacement)
+
+		curr.data = replacement.data
+	}
+
+	for {
+		if needUpdate == nil {
+			break
+		}
+
+		needUpdate.height = int(math.Max(float64(needUpdate.left.getHeight()), float64(needUpdate.right.getHeight()))) + 1
+
+		needUpdate = needUpdate.parent
+	}
+}
+
 func (b *BalancedBST) getBalanceFactor() int {
 	return b.left.getHeight() - b.right.getHeight()
 }
@@ -118,6 +194,17 @@ func (b *BalancedBST) getHeight() int {
 	}
 
 	return b.height
+}
+
+func (b *BalancedBST) getMinimumNode() (node *BalancedBST) {
+	curr := b
+	for {
+		if curr.left == nil {
+			return curr
+		}
+
+		curr = curr.left
+	}
 }
 
 func (b *BalancedBST) RotateLeft() {
