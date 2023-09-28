@@ -13,6 +13,16 @@ type BalancedBST struct {
 	balanceFactor int
 }
 
+type rotationType int
+
+const (
+	noRotationType rotationType = iota
+	leftRotationType
+	rightRotationType
+	leftRightRotationType
+	rightLeftRotationType
+)
+
 func CreateBalancedBST(data int) *BalancedBST {
 	return &BalancedBST{
 		data: data,
@@ -65,6 +75,126 @@ func (b *BalancedBST) Insert(node *BalancedBST) {
 		curr.right = node
 	}
 	node.parent = curr
+
+	imbalancedNode, rt := b.updateBalanceFactor(node)
+
+	switch rt {
+	case leftRotationType:
+		b.rotateLeft(imbalancedNode)
+	case rightRotationType:
+		b.rotateRight(imbalancedNode)
+	case leftRightRotationType:
+	case rightLeftRotationType:
+	}
+
+}
+
+func (b *BalancedBST) updateBalanceFactor(node *BalancedBST) (*BalancedBST, rotationType) {
+	var backTrackingRecord string
+
+	curr := node
+	rt := noRotationType
+	for curr.parent != nil {
+		if curr.parent.left == curr {
+			curr.parent.balanceFactor++
+			backTrackingRecord = fmt.Sprintf("%s %d", backTrackingRecord, 1)
+		} else if curr.parent.right == curr {
+			curr.parent.balanceFactor--
+			backTrackingRecord = fmt.Sprintf("%s %d", backTrackingRecord, -1)
+		}
+
+		curr = curr.parent
+
+		if math.Abs(float64(curr.balanceFactor)) > 1 {
+			if node.data < curr.left.data {
+				rt = rightRotationType
+			} else if node.data > curr.right.data {
+				rt = leftRotationType
+			} else if node.data > curr.left.data {
+				rt = leftRightRotationType
+			} else if node.data < curr.right.data {
+				rt = rightLeftRotationType
+			}
+
+			return curr, rt
+		}
+	}
+
+	return nil, rt
+}
+
+func (b *BalancedBST) RotateLeft() {
+	b.rotateLeft(b)
+}
+
+func (b *BalancedBST) rotateLeft(curr *BalancedBST) {
+	if curr.parent != nil {
+		if curr.parent.right == curr {
+			curr.parent.right = curr.right
+		} else if curr.parent.left == curr {
+			curr.parent.left = curr.right
+		}
+
+		curr.right.parent = curr.parent
+	}
+
+	curr.parent = curr.right
+
+	if curr.parent.left != nil {
+		curr.parent.left.parent = curr
+	}
+	curr.right = curr.parent.left
+
+	curr.parent.left = curr
+
+	curr.updateBalanceFactorAfterRotation()
+}
+
+func (b *BalancedBST) RotateRight() {
+	b.rotateRight(b)
+}
+
+func (b *BalancedBST) rotateRight(curr *BalancedBST) {
+	if curr.parent != nil {
+		if curr.parent.left == curr {
+			curr.parent.left = curr.left
+		} else if curr.parent.right == curr {
+			curr.parent.right = curr.left
+		}
+
+		curr.left.parent = curr.parent
+	}
+
+	curr.parent = curr.left
+
+	if curr.parent.right != nil {
+		curr.parent.right.parent = curr
+	}
+	curr.left = curr.parent.right
+
+	curr.parent.right = curr
+
+	curr.updateBalanceFactorAfterRotation()
+}
+
+func (b *BalancedBST) rotateLeftRight(curr *BalancedBST) {
+
+}
+
+func (b *BalancedBST) rotateRightLeft(curr *BalancedBST) {
+
+}
+
+func (b *BalancedBST) updateBalanceFactorAfterRotation() {
+	b.parent.balanceFactor = 0
+
+	b.balanceFactor = 0
+	if b.left != nil {
+		b.balanceFactor += 1
+	}
+	if b.right != nil {
+		b.balanceFactor -= 1
+	}
 }
 
 func (b *BalancedBST) IsBalanced() bool {
@@ -117,46 +247,4 @@ func (b *BalancedBST) getImbalancedNode(curr *BalancedBST, height *int) *Balance
 	}
 
 	return curr
-}
-
-func (b *BalancedBST) RotateLeft() {
-	if b.parent != nil {
-		if b.parent.right == b {
-			b.parent.right = b.right
-		} else if b.parent.left == b {
-			b.parent.left = b.right
-		}
-
-		b.right.parent = b.parent
-	}
-
-	b.parent = b.right
-
-	if b.parent.left != nil {
-		b.parent.left.parent = b
-	}
-	b.right = b.parent.left
-
-	b.parent.left = b
-}
-
-func (b *BalancedBST) RotateRight() {
-	if b.parent != nil {
-		if b.parent.left == b {
-			b.parent.left = b.left
-		} else if b.parent.right == b {
-			b.parent.right = b.left
-		}
-
-		b.left.parent = b.parent
-	}
-
-	b.parent = b.left
-
-	if b.parent.right != nil {
-		b.parent.right.parent = b
-	}
-	b.left = b.parent.right
-
-	b.parent.right = b
 }

@@ -51,39 +51,6 @@ func TestBalancedBST_GetImbalancedNode(t *testing.T) {
 
 /*
 	 imbalanced tree
-				5
-		  3			  8
-	 	2	4
-	  1
-*/
-/*
-	 after rotating
-				3
-		  2			  5
-	 	1			4	8
-*/
-func TestBalancedBST_RotateRight(t *testing.T) {
-	parentNode := CreateBalancedBST(5)
-	parentNodeAfterRotation := CreateBalancedBST(3)
-	parentNode.Insert(parentNodeAfterRotation)
-	parentNode.Insert(CreateBalancedBST(8))
-	parentNode.Insert(CreateBalancedBST(2))
-	parentNode.Insert(CreateBalancedBST(4))
-	parentNode.Insert(CreateBalancedBST(1))
-
-	parentNode.RotateRight()
-
-	bstDFS := CreateBSTDFS(parentNodeAfterRotation)
-	res := bstDFS.Traverse()
-
-	expectedRes := "3 2 1 5 4 8"
-	if res != expectedRes {
-		t.Fatalf("expect res %s but got %s", expectedRes, res)
-	}
-}
-
-/*
-	 imbalanced tree
 				2
 		  1			  4
 					3	5
@@ -110,6 +77,39 @@ func TestBalancedBST_RotateLeft(t *testing.T) {
 	res := bstDFS.Traverse()
 
 	expectedRes := "4 2 1 3 5 8"
+	if res != expectedRes {
+		t.Fatalf("expect res %s but got %s", expectedRes, res)
+	}
+}
+
+/*
+	 imbalanced tree
+				5
+		  3			  8
+	 	2	4
+	  1
+*/
+/*
+	 after rotating
+				3
+		  2			  5
+	 	1			4	8
+*/
+func TestBalancedBST_RotateRight(t *testing.T) {
+	parentNode := CreateBalancedBST(5)
+	parentNodeAfterRotation := CreateBalancedBST(3)
+	parentNode.Insert(parentNodeAfterRotation)
+	parentNode.Insert(CreateBalancedBST(8))
+	parentNode.Insert(CreateBalancedBST(2))
+	parentNode.Insert(CreateBalancedBST(4))
+	parentNode.Insert(CreateBalancedBST(1))
+
+	parentNode.RotateRight()
+
+	bstDFS := CreateBSTDFS(parentNodeAfterRotation)
+	res := bstDFS.Traverse()
+
+	expectedRes := "3 2 1 5 4 8"
 	if res != expectedRes {
 		t.Fatalf("expect res %s but got %s", expectedRes, res)
 	}
