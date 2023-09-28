@@ -161,7 +161,19 @@ func TestBalancedBST_RotateRightLeft(t *testing.T) {
 				4
 		  2			  8
 	 	1	3		6	9
+*/
+/*
+	 after recovery of 5
+				4
+		  2			  8
+	 	1	3		6	9
 				  5
+*/
+/*
+	 after third deletion
+				4
+		  2			  6
+	 	1	3		5	8
 */
 func TestBalancedBST_Delete(t *testing.T) {
 	parentNode := CreateBalancedBST(4)
@@ -189,6 +201,16 @@ func TestBalancedBST_Delete(t *testing.T) {
 	res = bstDFS.Traverse()
 
 	expectedRes = "4 2 1 3 8 6 9"
+	if res != expectedRes {
+		t.Fatalf("expect res %s but got %s", expectedRes, res)
+	}
+
+	parentNode.Insert(CreateBalancedBST(5))
+	parentNode.Delete(CreateBalancedBST(9))
+
+	res = bstDFS.Traverse()
+
+	expectedRes = "4 2 1 3 6 5 8"
 	if res != expectedRes {
 		t.Fatalf("expect res %s but got %s", expectedRes, res)
 	}

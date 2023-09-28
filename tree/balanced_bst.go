@@ -25,7 +25,8 @@ const (
 
 func CreateBalancedBST(data int) *BalancedBST {
 	return &BalancedBST{
-		data: data,
+		data:   data,
+		height: 1,
 	}
 }
 
@@ -140,7 +141,6 @@ func (b *BalancedBST) delete(node *BalancedBST) {
 
 		if replacement != nil {
 			replacement.parent = curr.parent
-			needUpdate = replacement.parent
 		}
 
 		if curr.data < curr.parent.data {
@@ -149,13 +149,13 @@ func (b *BalancedBST) delete(node *BalancedBST) {
 			curr.parent.right = replacement
 		}
 
+		needUpdate = curr.parent
 		curr = nil
 	} else if curr.right == nil {
 		replacement := curr.left
 
 		if replacement != nil {
 			replacement.parent = curr.parent
-			needUpdate = replacement.parent
 		}
 
 		if curr.data < curr.parent.data {
@@ -164,6 +164,7 @@ func (b *BalancedBST) delete(node *BalancedBST) {
 			curr.parent.right = replacement
 		}
 
+		needUpdate = curr.parent
 		curr = nil
 	} else {
 		replacement := curr.right.getMinimumNode()
@@ -176,6 +177,27 @@ func (b *BalancedBST) delete(node *BalancedBST) {
 	for {
 		if needUpdate == nil {
 			break
+		}
+
+		balanceFactor := needUpdate.getBalanceFactor()
+		if balanceFactor > 1 {
+			if needUpdate.left.getBalanceFactor() > 0 {
+				needUpdate = b.rotateRight(needUpdate)
+			} else if needUpdate.left.getBalanceFactor() < 0 {
+				b.rotateLeft(needUpdate.left)
+				needUpdate.left.height = int(math.Max(float64(needUpdate.left.left.getHeight()), float64(needUpdate.left.right.getHeight()))) + 1
+
+				needUpdate = b.rotateRight(needUpdate)
+			}
+		} else if balanceFactor < -1 {
+			if needUpdate.right.getBalanceFactor() < 0 {
+				needUpdate = b.rotateLeft(needUpdate)
+			} else if needUpdate.right.getBalanceFactor() > 0 {
+				b.rotateRight(needUpdate.right)
+				needUpdate.right.height = int(math.Max(float64(needUpdate.right.left.getHeight()), float64(needUpdate.right.right.getHeight()))) + 1
+
+				b.rotateLeft(needUpdate)
+			}
 		}
 
 		needUpdate.height = int(math.Max(float64(needUpdate.left.getHeight()), float64(needUpdate.right.getHeight()))) + 1
