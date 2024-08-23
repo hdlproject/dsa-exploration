@@ -1,43 +1,10 @@
 package queue
 
-import "fmt"
-
-//type NodeDataInf interface {
-//	String() string
-//}
-//
-//type SimpleNode struct {
-//	data int
-//}
-//
-//func (s *SimpleNode) String() string {
-//	return fmt.Sprintf("%d", s.data)
-//}
-//
-//func CreateSimpleNode(data int) *SimpleNode {
-//	return &SimpleNode{
-//		data: data,
-//	}
-//}
-
-type Node struct {
-	data interface{}
-	next *Node
-}
-
-func createNode(data interface{}) *Node {
-	return &Node{
-		data: data,
-	}
-}
-
-func (n *Node) String() string {
-	return fmt.Sprintf("%v", n.data)
-}
+import "dsa-exploration/node"
 
 type Queue struct {
-	firstNode *Node
-	lastNode  *Node
+	firstNode *node.Node
+	lastNode  *node.Node
 }
 
 func CreateQueue() *Queue {
@@ -45,14 +12,14 @@ func CreateQueue() *Queue {
 }
 
 func (q *Queue) Enqueue(data interface{}) {
-	node := createNode(data)
+	n := node.CreateNode(data)
 
 	if q.lastNode == nil {
-		q.lastNode = node
-		q.firstNode = node
+		q.lastNode = n
+		q.firstNode = n
 	} else {
-		q.lastNode.next = node
-		q.lastNode = node
+		q.lastNode.SetNext(n)
+		q.lastNode = n
 	}
 }
 
@@ -62,13 +29,13 @@ func (q *Queue) Dequeue() interface{} {
 	}
 
 	currNode := q.firstNode
-	q.firstNode = q.firstNode.next
+	q.firstNode = q.firstNode.GetNext()
 
 	if q.firstNode == nil {
 		q.lastNode = nil
 	}
 
-	return currNode.data
+	return currNode.GetData()
 }
 
 func (q *Queue) IsEmpty() bool {
