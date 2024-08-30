@@ -13,6 +13,7 @@ Here is the table of contents:
 - [Stack](./stack): a data structure for storing data in LIFO (Last In First Out) order.
 
 ### Advanced
+
 - [Tree](./tree): a data structure for storing data hierarchically.
     - [Binary Search Tree](./tree/bst.go): a data structure for storing sorted hierarchical data with each node having
       at most two children. The left one is smaller from the parent and the right one is bigger.
@@ -24,4 +25,5 @@ Here is the table of contents:
       height in each alteration (insert/update/delete). Balanced Binary Search Tree in this repository implements AVL
       Tree. The core concept of this data structure is doing checking in every alteration and rotating the branch if the
       alteration cause imbalance.
-- [Shunting Yard](./shunting-yard): ???
+- [Shunting Yard](./shunting-yard): an algorithm to convert an infix expression to a postfix expression. Here is the
+  example: `A * B + C` -> `A B * C +`.
